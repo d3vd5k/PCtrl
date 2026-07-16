@@ -18,6 +18,15 @@ export const Role = {
 export type Role = (typeof Role)[keyof typeof Role]
 
 
+export const Access = {
+  GRANTED: 'GRANTED',
+  SUSPENDED: 'SUSPENDED',
+  REJECTED: 'REJECTED'
+} as const
+
+export type Access = (typeof Access)[keyof typeof Access]
+
+
 export const Power_action = {
   MAINS_CONNECTED: 'MAINS_CONNECTED',
   MAINS_CUT: 'MAINS_CUT',

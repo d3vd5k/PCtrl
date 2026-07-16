@@ -17,6 +17,11 @@ enum Role{
   ADMIN
   ROOT
 }
+enum Access {
+  GRANTED
+  SUSPENDED
+  REJECTED
+}
 enum Power_action{
   MAINS_CONNECTED
   MAINS_CUT
@@ -30,9 +35,10 @@ model User{
   name String
   email String @unique
   role Role @default(USER)
-  password_hash String
+  access Access @default(SUSPENDED)
+  password_hash String?
   created_at DateTime @default(now())
-  power_events Power_Event[]
+  power_events Power_event[]
   auth_sessions Auth_session[]
 }
 
@@ -42,11 +48,11 @@ model Plug{
   ip_address String
   mac_address  String   @unique
   plug_identifier String?
-  power_events Power_Event[]
+  power_events Power_event[]
 }
 
 
-model Power_Event{
+model Power_event{
   event_id String @id @default(uuid())
   event_type Power_action
   user_id String?
@@ -59,7 +65,7 @@ model Power_Event{
 
 model Auth_session{
   auth_session_id String @id @default(uuid())
-  token String @unique //ideally change to token hash
+  token_hash String @unique //ideally change to token hash
   user_id String?
   user User? @relation(fields:[user_id], references:[user_id])
   created_at DateTime @default(now())

@@ -53,7 +53,7 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   Plug: 'Plug',
-  Power_Event: 'Power_Event',
+  Power_event: 'Power_event',
   Auth_session: 'Auth_session'
 } as const
 
@@ -78,6 +78,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   role: 'role',
+  access: 'access',
   password_hash: 'password_hash',
   created_at: 'created_at'
 } as const
@@ -96,7 +97,7 @@ export const PlugScalarFieldEnum = {
 export type PlugScalarFieldEnum = (typeof PlugScalarFieldEnum)[keyof typeof PlugScalarFieldEnum]
 
 
-export const Power_EventScalarFieldEnum = {
+export const Power_eventScalarFieldEnum = {
   event_id: 'event_id',
   event_type: 'event_type',
   user_id: 'user_id',
@@ -105,12 +106,12 @@ export const Power_EventScalarFieldEnum = {
   description: 'description'
 } as const
 
-export type Power_EventScalarFieldEnum = (typeof Power_EventScalarFieldEnum)[keyof typeof Power_EventScalarFieldEnum]
+export type Power_eventScalarFieldEnum = (typeof Power_eventScalarFieldEnum)[keyof typeof Power_eventScalarFieldEnum]
 
 
 export const Auth_sessionScalarFieldEnum = {
   auth_session_id: 'auth_session_id',
-  token: 'token',
+  token_hash: 'token_hash',
   user_id: 'user_id',
   created_at: 'created_at',
   expires_at: 'expires_at',

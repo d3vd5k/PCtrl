@@ -182,7 +182,7 @@ export type PlugWhereInput = {
   ip_address?: Prisma.StringFilter<"Plug"> | string
   mac_address?: Prisma.StringFilter<"Plug"> | string
   plug_identifier?: Prisma.StringNullableFilter<"Plug"> | string | null
-  power_events?: Prisma.Power_EventListRelationFilter
+  power_events?: Prisma.Power_eventListRelationFilter
 }
 
 export type PlugOrderByWithRelationInput = {
@@ -191,7 +191,7 @@ export type PlugOrderByWithRelationInput = {
   ip_address?: Prisma.SortOrder
   mac_address?: Prisma.SortOrder
   plug_identifier?: Prisma.SortOrderInput | Prisma.SortOrder
-  power_events?: Prisma.Power_EventOrderByRelationAggregateInput
+  power_events?: Prisma.Power_eventOrderByRelationAggregateInput
 }
 
 export type PlugWhereUniqueInput = Prisma.AtLeast<{
@@ -203,7 +203,7 @@ export type PlugWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Plug"> | string
   ip_address?: Prisma.StringFilter<"Plug"> | string
   plug_identifier?: Prisma.StringNullableFilter<"Plug"> | string | null
-  power_events?: Prisma.Power_EventListRelationFilter
+  power_events?: Prisma.Power_eventListRelationFilter
 }, "plug_id" | "mac_address">
 
 export type PlugOrderByWithAggregationInput = {
@@ -234,7 +234,7 @@ export type PlugCreateInput = {
   ip_address: string
   mac_address: string
   plug_identifier?: string | null
-  power_events?: Prisma.Power_EventCreateNestedManyWithoutPlugInput
+  power_events?: Prisma.Power_eventCreateNestedManyWithoutPlugInput
 }
 
 export type PlugUncheckedCreateInput = {
@@ -243,7 +243,7 @@ export type PlugUncheckedCreateInput = {
   ip_address: string
   mac_address: string
   plug_identifier?: string | null
-  power_events?: Prisma.Power_EventUncheckedCreateNestedManyWithoutPlugInput
+  power_events?: Prisma.Power_eventUncheckedCreateNestedManyWithoutPlugInput
 }
 
 export type PlugUpdateInput = {
@@ -252,7 +252,7 @@ export type PlugUpdateInput = {
   ip_address?: Prisma.StringFieldUpdateOperationsInput | string
   mac_address?: Prisma.StringFieldUpdateOperationsInput | string
   plug_identifier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  power_events?: Prisma.Power_EventUpdateManyWithoutPlugNestedInput
+  power_events?: Prisma.Power_eventUpdateManyWithoutPlugNestedInput
 }
 
 export type PlugUncheckedUpdateInput = {
@@ -261,7 +261,7 @@ export type PlugUncheckedUpdateInput = {
   ip_address?: Prisma.StringFieldUpdateOperationsInput | string
   mac_address?: Prisma.StringFieldUpdateOperationsInput | string
   plug_identifier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  power_events?: Prisma.Power_EventUncheckedUpdateManyWithoutPlugNestedInput
+  power_events?: Prisma.Power_eventUncheckedUpdateManyWithoutPlugNestedInput
 }
 
 export type PlugCreateManyInput = {
@@ -315,10 +315,6 @@ export type PlugMinOrderByAggregateInput = {
 export type PlugScalarRelationFilter = {
   is?: Prisma.PlugWhereInput
   isNot?: Prisma.PlugWhereInput
-}
-
-export type NullableStringFieldUpdateOperationsInput = {
-  set?: string | null
 }
 
 export type PlugCreateNestedOneWithoutPower_eventsInput = {
@@ -410,7 +406,7 @@ export type PlugCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  * PlugCountOutputType without action
  */
 export type PlugCountOutputTypeCountPower_eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.Power_EventWhereInput
+  where?: Prisma.Power_eventWhereInput
 }
 
 
@@ -459,7 +455,7 @@ export type PlugIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $PlugPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plug"
   objects: {
-    power_events: Prisma.$Power_EventPayload<ExtArgs>[]
+    power_events: Prisma.$Power_eventPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     plug_id: string
@@ -861,7 +857,7 @@ readonly fields: PlugFieldRefs;
  */
 export interface Prisma__PlugClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  power_events<T extends Prisma.Plug$power_eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plug$power_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$Power_EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  power_events<T extends Prisma.Plug$power_eventsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plug$power_eventsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$Power_eventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1293,23 +1289,23 @@ export type PlugDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
  */
 export type Plug$power_eventsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Power_Event
+   * Select specific fields to fetch from the Power_event
    */
-  select?: Prisma.Power_EventSelect<ExtArgs> | null
+  select?: Prisma.Power_eventSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Power_Event
+   * Omit specific fields from the Power_event
    */
-  omit?: Prisma.Power_EventOmit<ExtArgs> | null
+  omit?: Prisma.Power_eventOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.Power_EventInclude<ExtArgs> | null
-  where?: Prisma.Power_EventWhereInput
-  orderBy?: Prisma.Power_EventOrderByWithRelationInput | Prisma.Power_EventOrderByWithRelationInput[]
-  cursor?: Prisma.Power_EventWhereUniqueInput
+  include?: Prisma.Power_eventInclude<ExtArgs> | null
+  where?: Prisma.Power_eventWhereInput
+  orderBy?: Prisma.Power_eventOrderByWithRelationInput | Prisma.Power_eventOrderByWithRelationInput[]
+  cursor?: Prisma.Power_eventWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.Power_EventScalarFieldEnum | Prisma.Power_EventScalarFieldEnum[]
+  distinct?: Prisma.Power_eventScalarFieldEnum | Prisma.Power_eventScalarFieldEnum[]
 }
 
 /**

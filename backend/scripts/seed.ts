@@ -1,5 +1,5 @@
 import { prisma } from "../src/lib/prisma.js";
-import { Role } from "../src/generated/prisma/client.js";
+import { Role, Access } from "../src/generated/prisma/client.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
 async function main(){
@@ -9,11 +9,12 @@ async function main(){
     }
     const root = await prisma.user.upsert({
     where: { email: "root@pctrl.local" },
-    update: {},
+    update: {access: Access.GRANTED,},
     create: {
       name: "Root",
       email: "root@pctrl.local",
       role: Role.ROOT,
+      access: Access.GRANTED,
       password_hash: root_passwd_hash,
     },
   });
@@ -23,11 +24,12 @@ async function main(){
     }
     const admin = await prisma.user.upsert({
     where: { email: "get.d3v@gmail.com" },
-    update: {},
+    update: {access: Access.GRANTED,},
     create: {
       name: "d3vd5k",
       email: "get.d3v@gmail.com",
       role: Role.ADMIN,
+      access: Access.GRANTED,
       password_hash: admin_passwd_hash,
     },
   });

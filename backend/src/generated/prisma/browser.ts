@@ -28,10 +28,10 @@ export type User = Prisma.UserModel
  */
 export type Plug = Prisma.PlugModel
 /**
- * Model Power_Event
+ * Model Power_event
  * 
  */
-export type Power_Event = Prisma.Power_EventModel
+export type Power_event = Prisma.Power_eventModel
 /**
  * Model Auth_session
  * 

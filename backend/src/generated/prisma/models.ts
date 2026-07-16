@@ -10,6 +10,6 @@
  */
 export type * from './models/User.js'
 export type * from './models/Plug.js'
-export type * from './models/Power_Event.js'
+export type * from './models/Power_event.js'
 export type * from './models/Auth_session.js'
 export type * from './commonInputTypes.js'

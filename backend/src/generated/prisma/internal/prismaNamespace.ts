@@ -386,7 +386,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   Plug: 'Plug',
-  Power_Event: 'Power_Event',
+  Power_event: 'Power_event',
   Auth_session: 'Auth_session'
 } as const
 
@@ -403,7 +403,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "plug" | "power_Event" | "auth_session"
+    modelProps: "user" | "plug" | "power_event" | "auth_session"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -555,77 +555,77 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Power_Event: {
-      payload: Prisma.$Power_EventPayload<ExtArgs>
-      fields: Prisma.Power_EventFieldRefs
+    Power_event: {
+      payload: Prisma.$Power_eventPayload<ExtArgs>
+      fields: Prisma.Power_eventFieldRefs
       operations: {
         findUnique: {
-          args: Prisma.Power_EventFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload> | null
+          args: Prisma.Power_eventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload> | null
         }
         findUniqueOrThrow: {
-          args: Prisma.Power_EventFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         findFirst: {
-          args: Prisma.Power_EventFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload> | null
+          args: Prisma.Power_eventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload> | null
         }
         findFirstOrThrow: {
-          args: Prisma.Power_EventFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         findMany: {
-          args: Prisma.Power_EventFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>[]
+          args: Prisma.Power_eventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>[]
         }
         create: {
-          args: Prisma.Power_EventCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         createMany: {
-          args: Prisma.Power_EventCreateManyArgs<ExtArgs>
+          args: Prisma.Power_eventCreateManyArgs<ExtArgs>
           result: BatchPayload
         }
         createManyAndReturn: {
-          args: Prisma.Power_EventCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>[]
+          args: Prisma.Power_eventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>[]
         }
         delete: {
-          args: Prisma.Power_EventDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         update: {
-          args: Prisma.Power_EventUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         deleteMany: {
-          args: Prisma.Power_EventDeleteManyArgs<ExtArgs>
+          args: Prisma.Power_eventDeleteManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateMany: {
-          args: Prisma.Power_EventUpdateManyArgs<ExtArgs>
+          args: Prisma.Power_eventUpdateManyArgs<ExtArgs>
           result: BatchPayload
         }
         updateManyAndReturn: {
-          args: Prisma.Power_EventUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>[]
+          args: Prisma.Power_eventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>[]
         }
         upsert: {
-          args: Prisma.Power_EventUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_EventPayload>
+          args: Prisma.Power_eventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Power_eventPayload>
         }
         aggregate: {
-          args: Prisma.Power_EventAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregatePower_Event>
+          args: Prisma.Power_eventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePower_event>
         }
         groupBy: {
-          args: Prisma.Power_EventGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Power_EventGroupByOutputType>[]
+          args: Prisma.Power_eventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Power_eventGroupByOutputType>[]
         }
         count: {
-          args: Prisma.Power_EventCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Power_EventCountAggregateOutputType> | number
+          args: Prisma.Power_eventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Power_eventCountAggregateOutputType> | number
         }
       }
     }
@@ -747,6 +747,7 @@ export const UserScalarFieldEnum = {
   name: 'name',
   email: 'email',
   role: 'role',
+  access: 'access',
   password_hash: 'password_hash',
   created_at: 'created_at'
 } as const
@@ -765,7 +766,7 @@ export const PlugScalarFieldEnum = {
 export type PlugScalarFieldEnum = (typeof PlugScalarFieldEnum)[keyof typeof PlugScalarFieldEnum]
 
 
-export const Power_EventScalarFieldEnum = {
+export const Power_eventScalarFieldEnum = {
   event_id: 'event_id',
   event_type: 'event_type',
   user_id: 'user_id',
@@ -774,12 +775,12 @@ export const Power_EventScalarFieldEnum = {
   description: 'description'
 } as const
 
-export type Power_EventScalarFieldEnum = (typeof Power_EventScalarFieldEnum)[keyof typeof Power_EventScalarFieldEnum]
+export type Power_eventScalarFieldEnum = (typeof Power_eventScalarFieldEnum)[keyof typeof Power_eventScalarFieldEnum]
 
 
 export const Auth_sessionScalarFieldEnum = {
   auth_session_id: 'auth_session_id',
-  token: 'token',
+  token_hash: 'token_hash',
   user_id: 'user_id',
   created_at: 'created_at',
   expires_at: 'expires_at',
@@ -844,6 +845,20 @@ export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'Role[]'
  */
 export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Access'
+ */
+export type EnumAccessFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Access'>
+    
+
+
+/**
+ * Reference to a field of type 'Access[]'
+ */
+export type ListEnumAccessFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Access[]'>
     
 
 
@@ -1007,7 +1022,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   plug?: Prisma.PlugOmit
-  power_Event?: Prisma.Power_EventOmit
+  power_event?: Prisma.Power_eventOmit
   auth_session?: Prisma.Auth_sessionOmit
 }
 
