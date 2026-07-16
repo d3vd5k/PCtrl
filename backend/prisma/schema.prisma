@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role{
+  USER
+  ADMIN
+  ROOT
+}
+enum Power_action{
+  MAINS_CONNECTED
+  MAINS_CUT
+  BOOT_STARTED
+  BOOT_COMPLETE
+  SHUTDOWN_NORMAL
+  SHUTDOWN_FORCED
+}
+model User{
+  user_id String @id @default(uuid())
+  name String
+  email String @unique
+  role Role @default(USER)
+  password_hash String
+  created_at DateTime @default(now())
+  power_events Power_Event[]
+  auth_sessions Auth_session[]
+}
+
+model Plug{
+  plug_id String @id @default(uuid())
+  name String
+  ip_address String
+  mac_address  String   @unique
+  plug_identifier String?
+  power_events Power_Event[]
+}
+
+
+model Power_Event{
+  event_id String @id @default(uuid())
+  event_type Power_action
+  user_id String?
+  user User? @relation(fields: [user_id], references:[user_id])
+  plug_id String
+  plug Plug @relation(fields: [plug_id], references: [plug_id])
+  timestamp DateTime @default(now())
+  description String?
+}
+
+model Auth_session{
+  auth_session_id String @id @default(uuid())
+  token String @unique //ideally change to token hash
+  user_id String?
+  user User? @relation(fields:[user_id], references:[user_id])
+  created_at DateTime @default(now())
+  expires_at DateTime
+  valid Boolean @default(true)
+}
+
