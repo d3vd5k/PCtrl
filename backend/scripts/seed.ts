@@ -1,5 +1,5 @@
 import { prisma } from "../src/lib/prisma.js";
-import { Role, Access } from "../src/generated/prisma/client.js";
+import { Role, Access, Operation } from "../src/generated/prisma/client.js";
 import bcrypt from "bcrypt";
 import "dotenv/config";
 async function main(){
@@ -46,7 +46,19 @@ async function main(){
 
 
     console.log({ root: root.email, admin: admin.email, plug: plug.name });
-}
+
+    const operation = await prisma.pc_lock.upsert({
+    where: { lock_id: 0 }, // replace with real MAC
+    update: {},
+    create: {
+      lock_id: 0,
+      operation: Operation.NO_OPERATION,
+    },
+    });
+
+
+
+  }
 
 main().catch((e)=>{
     console.error(e);

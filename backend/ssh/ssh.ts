@@ -27,7 +27,7 @@ export const graceful_shutdown= async ()=>{
     } 
     catch (err) {
         console.log("PC is already offline or unreachable. Skipping shutdown.");
-        return;
+        throw err;
     }
 
     try{

@@ -9,8 +9,7 @@ export interface AuthedRequest extends Request {
 
 
 export async function require_auth(req: AuthedRequest, res: Response, next: NextFunction) {
-    const authHeader = req.headers.authorization;
-    const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : undefined;
+    const token = req.cookies?.pctrl_token;
 
     if (!token) {
         return res.status(401).json({ error: "Missing authorization token." });

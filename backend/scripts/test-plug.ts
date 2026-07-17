@@ -109,3 +109,20 @@ main().catch((err)=>{
 //   overcurrent_status: 'normal',
 //   charging_status: 'normal'
 // }
+
+
+
+
+//sample energy info
+
+// {
+//   today_runtime: 16,
+//   month_runtime: 578,
+//   today_energy: 0,
+//   today_energy_mwh: 0,
+//   month_energy: 108,
+//   month_energy_mwh: 108456,
+//   local_time: '2026-07-17 13:24:07',
+//   electricity_charge: [ 0, 0, 0 ],
+//   current_power: 0
+// }

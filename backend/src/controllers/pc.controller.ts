@@ -3,6 +3,8 @@ import {prisma} from "../lib/prisma.js"
 // import {initiate_boot, full_shutdown} from "../src/lib/boot.js"
 import { plug_turn_off, plug_turn_on, get_plug_status } from "../lib/plug.action.js";
 import { is_pc_online, wait_for_boot, wait_for_shutdown, graceful_shutdown } from "../../ssh/ssh.js";
+import { get_cooldown_remaining_ms, get_current_operation, begin_operation, end_operation, mark_power_cut } from "../lib/pc-lock.js";
+import { Operation } from "../generated/prisma/enums.js";
 const SHUTDOWN_TIMER=  2*60*1000;
 const get_plug= async()=>{
     const plug= prisma.plug.findFirst();
@@ -21,6 +23,7 @@ export const get_status= async (_req:Request, res:Response)=>{
     }
     catch(err){
         console.error("can't get Plug Status");
+        res.status(500).json({pc_status:"unknown", plug:"unreachable", message:"can't connect to plug, plug maybe offline"});
     }
 }
 
@@ -61,11 +64,31 @@ export const get_status= async (_req:Request, res:Response)=>{
 // }
 
 export const boot_pc= async(_req: Request, res: Response)=> {
-    const plug = await get_plug();
-    if(!plug){
-        throw new Error("Plug Not Found");
+    const op = await get_current_operation();
+    if (op) {
+        return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
     }
-    await plug_turn_on(plug.plug_id);
+
+    const cooldown = await get_cooldown_remaining_ms();
+    if (cooldown > 0) {
+        return res.status(409).json({
+        message: `Power was recently cut — waiting for cooldown time. Try again in ${Math.ceil(cooldown / 1000)}s.`,
+        });
+    }
+    const plug = await get_plug();
+    if (!plug) {
+        return res.status(404).json({ message: "Plug not configured." });
+    }
+    await begin_operation(Operation.BOOT);
+    try {
+        await plug_turn_on(plug.plug_id);
+    }
+    catch (err) {
+        await end_operation();
+        console.error("[boot_pc] plug unreachable:", err);
+        return res.status(503).json({ message: "Unable to reach plug. Check physical connection." });
+    }
+    
     await prisma.power_event.create({
     data: { event_type: "BOOT_STARTED", plug_id: plug.plug_id },
     });
@@ -80,53 +103,92 @@ export const boot_pc= async(_req: Request, res: Response)=> {
         description: booted ? null : "Timed out waiting for boot confirmation",
         },
     }).catch(console.error);
-    });
-}
+    }).finally(()=> end_operation());
+};
 
 
-export const shutdown_pc= async(_req:Request, res:Response)=>{
+export const shutdown_pc = async (_req: Request, res: Response) => {
+    const op = await get_current_operation();
+    if (op) {
+        return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
+    }
+    
+    
     const plug = await get_plug();
-    if(!plug){
-        throw new Error("Plug Not Found");
+    if (!plug) {
+        return res.status(404).json({ message: "Plug not configured." });
+    }
+    await begin_operation(Operation.SHUTDOWN);
+    try {
+        await graceful_shutdown();
+    } catch (err) {
+        console.error("[shutdown_pc] SSH shutdown command failed:", err);
+        return res.status(503).json({ message: "Could not reach target PC over SSH." });
     }
 
-    await graceful_shutdown();
     await prisma.power_event.create({
         data: { event_type: "SHUTDOWN_NORMAL", plug_id: plug.plug_id },
     });
 
     res.status(202).json({ message: "Graceful shutdown initiated." });
-    const confirmed= await wait_for_shutdown();
-    if (!confirmed) {
+    try {
+        const confirmed = await wait_for_shutdown();
+        if (!confirmed) {
         console.error(`[shutdown] Target did not go offline within timeout — NOT cutting power.`);
+        await prisma.power_event.create({
+            data: {
+            event_type: "SHUTDOWN_NORMAL",
+            plug_id: plug.plug_id,
+            description: "Timed out waiting for shutdown confirmation — power NOT cut, needs manual check",
+            },
+        });
+        return;
+        }
+
+        await new Promise((r) => setTimeout(r, SHUTDOWN_TIMER));
+        await mark_power_cut();
+        await plug_turn_off(plug.plug_id);
+        await prisma.power_event.create({
+        data: { event_type: "MAINS_CUT", plug_id: plug.plug_id, description: "Power cut after confirmed graceful shutdown" },
+        });
+    }
+    catch (err) {
+        console.error("[shutdown_pc] post-response failure:", err);
         await prisma.power_event.create({
         data: {
             event_type: "SHUTDOWN_NORMAL",
             plug_id: plug.plug_id,
-            description: "Timed out waiting for shutdown confirmation — power NOT cut, needs manual check",
+            description: `Post-shutdown-confirmation step failed: ${err instanceof Error ? err.message : String(err)}`,
         },
-        });
-        return;
+        }).catch(console.error); 
     }
-    await new Promise((r)=>{setTimeout(r, SHUTDOWN_TIMER)});
-    await plug_turn_off(plug.plug_id);
-    await prisma.power_event.create({
-        data: { event_type: "MAINS_CUT", plug_id: plug.plug_id, description: "Power cut after confirmed graceful shutdown" },
-    });
-}
-
+    finally{
+        await end_operation();
+    }
+};
 export async function forced_shutdown(_req: Request, res: Response) {
-    const plug = await get_plug();
-    if(!plug){
-        throw new Error("Plug Not Found");
+    const op = await get_current_operation();
+    if (op) {
+        return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
     }
+    try{
+        const plug = await get_plug();
+        if(!plug){
+            throw new Error("Plug Not Found");
+        }
 
-    await plug_turn_off(plug.plug_id);
-    await prisma.power_event.create({
-        data: { event_type: "SHUTDOWN_FORCED", plug_id: plug.plug_id },
-    });
+        await plug_turn_off(plug.plug_id);
+        await mark_power_cut();
+        await prisma.power_event.create({
+            data: { event_type: "SHUTDOWN_FORCED", plug_id: plug.plug_id },
+        });
 
-    res.json({ message: "Power cut immediately." });
+        res.json({ message: "Power cut immediately." });
+    }
+    catch(err){
+        res.status(500).json({message:"error", errors:err})
+    }
+   
 }
 
 

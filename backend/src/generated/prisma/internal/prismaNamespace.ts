@@ -387,7 +387,8 @@ export const ModelName = {
   User: 'User',
   Plug: 'Plug',
   Power_event: 'Power_event',
-  Auth_session: 'Auth_session'
+  Auth_session: 'Auth_session',
+  Pc_lock: 'Pc_lock'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +404,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "plug" | "power_event" | "auth_session"
+    modelProps: "user" | "plug" | "power_event" | "auth_session" | "pc_lock"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +704,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Pc_lock: {
+      payload: Prisma.$Pc_lockPayload<ExtArgs>
+      fields: Prisma.Pc_lockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.Pc_lockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.Pc_lockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        findFirst: {
+          args: Prisma.Pc_lockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.Pc_lockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        findMany: {
+          args: Prisma.Pc_lockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>[]
+        }
+        create: {
+          args: Prisma.Pc_lockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        createMany: {
+          args: Prisma.Pc_lockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.Pc_lockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>[]
+        }
+        delete: {
+          args: Prisma.Pc_lockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        update: {
+          args: Prisma.Pc_lockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        deleteMany: {
+          args: Prisma.Pc_lockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.Pc_lockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.Pc_lockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>[]
+        }
+        upsert: {
+          args: Prisma.Pc_lockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Pc_lockPayload>
+        }
+        aggregate: {
+          args: Prisma.Pc_lockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePc_lock>
+        }
+        groupBy: {
+          args: Prisma.Pc_lockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Pc_lockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.Pc_lockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Pc_lockCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -788,6 +863,15 @@ export const Auth_sessionScalarFieldEnum = {
 } as const
 
 export type Auth_sessionScalarFieldEnum = (typeof Auth_sessionScalarFieldEnum)[keyof typeof Auth_sessionScalarFieldEnum]
+
+
+export const Pc_lockScalarFieldEnum = {
+  lock_id: 'lock_id',
+  operation: 'operation',
+  power_cut_at: 'power_cut_at'
+} as const
+
+export type Pc_lockScalarFieldEnum = (typeof Pc_lockScalarFieldEnum)[keyof typeof Pc_lockScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -910,6 +994,34 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
+
+/**
+ * Reference to a field of type 'Operation'
+ */
+export type EnumOperationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Operation'>
+    
+
+
+/**
+ * Reference to a field of type 'Operation[]'
+ */
+export type ListEnumOperationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Operation[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1024,6 +1136,7 @@ export type GlobalOmitConfig = {
   plug?: Prisma.PlugOmit
   power_event?: Prisma.Power_eventOmit
   auth_session?: Prisma.Auth_sessionOmit
+  pc_lock?: Prisma.Pc_lockOmit
 }
 
 /* Types for Logging */

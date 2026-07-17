@@ -37,3 +37,13 @@ export const Power_action = {
 } as const
 
 export type Power_action = (typeof Power_action)[keyof typeof Power_action]
+
+
+export const Operation = {
+  NO_OPERATION: 'NO_OPERATION',
+  BOOT: 'BOOT',
+  SHUTDOWN: 'SHUTDOWN',
+  PLUG_CUT: 'PLUG_CUT'
+} as const
+
+export type Operation = (typeof Operation)[keyof typeof Operation]

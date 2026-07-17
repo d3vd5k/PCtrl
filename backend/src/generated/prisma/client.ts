@@ -61,3 +61,8 @@ export type Power_event = Prisma.Power_eventModel
  * 
  */
 export type Auth_session = Prisma.Auth_sessionModel
+/**
+ * Model Pc_lock
+ * 
+ */
+export type Pc_lock = Prisma.Pc_lockModel

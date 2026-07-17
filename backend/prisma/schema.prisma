@@ -30,6 +30,13 @@ enum Power_action{
   SHUTDOWN_NORMAL
   SHUTDOWN_FORCED
 }
+enum Operation{
+  NO_OPERATION
+  BOOT
+  SHUTDOWN
+  PLUG_CUT
+}
+
 model User{
   user_id String @id @default(uuid())
   name String
@@ -73,3 +80,8 @@ model Auth_session{
   valid Boolean @default(true)
 }
 
+model Pc_lock{
+  lock_id Int @unique @default(autoincrement())
+  operation Operation
+  power_cut_at DateTime?
+}
