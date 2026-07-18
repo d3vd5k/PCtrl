@@ -49,7 +49,7 @@ async function main(){
 
     const operation = await prisma.pc_lock.upsert({
     where: { lock_id: 0 }, // replace with real MAC
-    update: {},
+    update: {operation: Operation.NO_OPERATION,},
     create: {
       lock_id: 0,
       operation: Operation.NO_OPERATION,

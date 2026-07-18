@@ -3,7 +3,7 @@ import {prisma} from "../lib/prisma.js"
 // import {initiate_boot, full_shutdown} from "../src/lib/boot.js"
 import { plug_turn_off, plug_turn_on, get_plug_status } from "../lib/plug.action.js";
 import { is_pc_online, wait_for_boot, wait_for_shutdown, graceful_shutdown } from "../../ssh/ssh.js";
-import { get_cooldown_remaining_ms, get_current_operation, begin_operation, end_operation, mark_power_cut } from "../lib/pc-lock.js";
+import { get_cooldown_remaining_ms, get_current_operation, begin_operation, end_operation, mark_power_cut } from "../lib/pc_lock.js";
 import { Operation } from "../generated/prisma/enums.js";
 const SHUTDOWN_TIMER=  2*60*1000;
 const get_plug= async()=>{
@@ -22,8 +22,8 @@ export const get_status= async (_req:Request, res:Response)=>{
     
     }
     catch(err){
-        console.error("can't get Plug Status");
-        res.status(500).json({pc_status:"unknown", plug:"unreachable", message:"can't connect to plug, plug maybe offline"});
+        console.error("[get_status] failed:", err);
+        res.status(500).json({ pc_status: "unknown", plug: { reachable: false, device_on: null, power: null } });
     }
 }
 
@@ -65,7 +65,7 @@ export const get_status= async (_req:Request, res:Response)=>{
 
 export const boot_pc= async(_req: Request, res: Response)=> {
     const op = await get_current_operation();
-    if (op) {
+    if (op != "NO_OPERATION") {
         return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
     }
 
@@ -79,7 +79,10 @@ export const boot_pc= async(_req: Request, res: Response)=> {
     if (!plug) {
         return res.status(404).json({ message: "Plug not configured." });
     }
-    await begin_operation(Operation.BOOT);
+    const is_safe= await begin_operation(Operation.BOOT);
+    if(!is_safe){
+        return res.status(409).json({message: "Another operation maybe in progress, Wait for Cooldown"})
+    }
     try {
         await plug_turn_on(plug.plug_id);
     }
@@ -109,7 +112,7 @@ export const boot_pc= async(_req: Request, res: Response)=> {
 
 export const shutdown_pc = async (_req: Request, res: Response) => {
     const op = await get_current_operation();
-    if (op) {
+    if (op!="NO_OPERATION") {
         return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
     }
     
@@ -118,7 +121,15 @@ export const shutdown_pc = async (_req: Request, res: Response) => {
     if (!plug) {
         return res.status(404).json({ message: "Plug not configured." });
     }
-    await begin_operation(Operation.SHUTDOWN);
+    const plug_status= await get_plug_status(plug.plug_id);
+    
+    if(!plug_status.reachable){return res.status(500).json({message:"Plug unreachable"})}
+    else if(plug_status.device_on== false){return res.status(409).json({message:"Power Already cut"})}
+    
+    const is_safe= await begin_operation(Operation.SHUTDOWN);
+    if(!is_safe){
+        return res.status(409).json({message: "Another operation maybe in progress, Wait for Cooldown"})
+    }
     try {
         await graceful_shutdown();
     } catch (err) {
@@ -168,7 +179,7 @@ export const shutdown_pc = async (_req: Request, res: Response) => {
 };
 export async function forced_shutdown(_req: Request, res: Response) {
     const op = await get_current_operation();
-    if (op) {
+    if (op!="NO_OPERATION") {
         return res.status(409).json({ message: `Cannot power on — ${op.replace(/_/g, " ")} already in progress.` });
     }
     try{
@@ -176,7 +187,13 @@ export async function forced_shutdown(_req: Request, res: Response) {
         if(!plug){
             throw new Error("Plug Not Found");
         }
-
+        const plug_status= await get_plug_status(plug.plug_id);
+        if(!plug_status.reachable){return res.status(500).json({message:"Plug unreachable"})}
+        else if(plug_status.device_on== false){return res.status(409).json({message:"Power Already cut"})}
+        const is_safe= await begin_operation(Operation.PLUG_CUT);
+        if(!is_safe){
+            return res.status(409).json({message: "Another operation maybe in progress, Wait for Cooldown"})
+        }
         await plug_turn_off(plug.plug_id);
         await mark_power_cut();
         await prisma.power_event.create({
@@ -187,6 +204,9 @@ export async function forced_shutdown(_req: Request, res: Response) {
     }
     catch(err){
         res.status(500).json({message:"error", errors:err})
+    }
+    finally{
+        await end_operation();
     }
    
 }

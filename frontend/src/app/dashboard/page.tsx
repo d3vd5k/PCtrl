@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation";
 import { api_fetch } from "@/lib/api";
 
 interface PlugStatus {
-    reachable: boolean;
-    deviceOn: boolean | null;
-    energy: { todayEnergyWh: number; monthEnergyWh: number } | null;
+  reachable: boolean;
+  device_on: boolean | null;
+  power: number | string | null;
 }
 
 interface StatusResponse {
@@ -118,16 +118,14 @@ export default function DashboardPage() {
                 <StatusDot online={status?.plug.reachable ?? false} />
                 <span>
                 Plug {status?.plug.reachable ? "reachable" : "unreachable"}
-                {status?.plug.reachable && status.plug.deviceOn !== null && (
-                    <> · relay {status.plug.deviceOn ? "on" : "off"}</>
+                {status?.plug.reachable && status.plug.device_on !== null && (
+                    <> · relay {status.plug.device_on ? "on" : "off"}</>
                 )}
                 </span>
             </div>
 
-            {status?.plug.energy && (
-                <p className="text-xs text-neutral-500">
-                Today: {status.plug.energy.todayEnergyWh} Wh · This month: {status.plug.energy.monthEnergyWh} Wh
-                </p>
+            {status?.plug.reachable && status.plug.power !== null && (
+            <p className="text-xs text-neutral-500">Current draw: {status.plug.power} W</p>
             )}
             </div>
 
