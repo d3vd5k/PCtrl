@@ -22,6 +22,13 @@ interface UserInfo {
     role: string;
 }
 
+interface SessionSummary {
+  session_id: string;
+  status: string;
+  started_at: string;
+  services: { service_type: string; status: string }[];
+}
+
 const POLL_INTERVAL_MS = 5000;
 
 
@@ -30,6 +37,8 @@ export default function DashboardPage() {
     const router = useRouter();
     const [user, setUser] = useState<UserInfo | null>(null);
     const [status, setStatus] = useState<StatusResponse | null>(null);
+    const [sessions, setSessions] = useState<SessionSummary[]>([]);
+    const [creatingSession, setCreatingSession] = useState(false);
     const [actionInProgress, setActionInProgress] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
@@ -45,24 +54,57 @@ export default function DashboardPage() {
         }
     }, []);
 
+    const fetchSessions = useCallback(async () => {
+        try {
+        const data = await api_fetch("/api/sessions");
+        setSessions(data);
+        } catch (err) {
+        console.error("Failed to fetch sessions:", err);
+        }
+    }, []);
+
     useEffect(() => {
         async function init() {
-        try {
-            const me = await api_fetch("/api/auth/me");
-            setUser(me);
-            await fetchStatus();
-        } catch {
-            router.push("/login");
-            return;
-        } finally {
-            setLoading(false);
-        }
+            try {
+                const me = await api_fetch("/api/auth/me");
+                setUser(me);
+                await Promise.all([fetchStatus(), fetchSessions()]);
+            } catch {
+                router.push("/login");
+                return;
+            } finally {
+                setLoading(false);
+            }
         }
         init();
 
         const interval = setInterval(fetchStatus, POLL_INTERVAL_MS);
         return () => clearInterval(interval);
-    }, [fetchStatus, router]);
+    }, [fetchStatus, router, fetchSessions]);
+
+
+    async function handleNewSession() {
+        setCreatingSession(true);
+        setError(null);
+        try {
+        const session = await api_fetch("/api/sessions", { method: "POST" });
+        router.push(`/dashboard/session/${session.session_id}`);
+        } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to create session.");
+        setCreatingSession(false);
+        }
+    }
+
+    async function handleTerminateFromList(sessionId: string) {
+        if (!confirm("Terminate this session? All running services will be stopped.")) return;
+        try {
+        await api_fetch(`/api/sessions/${sessionId}/terminate`, { method: "POST" });
+        await fetchSessions();
+        } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to terminate session.");
+        }
+    }
+
 
     async function handleAction(action: "power-on" | "shutdown/graceful" | "shutdown/forced") {
         setError(null);
@@ -81,10 +123,10 @@ export default function DashboardPage() {
         await api_fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
         router.push("/login");
     }
-    async function handleNewSession() {
-        const session = await api_fetch("/api/sessions", { method: "POST" });
-        router.push(`/dashboard/session/${session.session_id}`);
-    }
+    // async function handleNewSession() {
+    //     const session = await api_fetch("/api/sessions", { method: "POST" });
+    //     router.push(`/dashboard/session/${session.session_id}`);
+    // }
 
     if (loading) {
         return (
@@ -175,8 +217,60 @@ export default function DashboardPage() {
                 variant="danger"
             />
             </div>
+            <div className="space-y-3">
+            <div className="flex items-center justify-between">
+                <h2 className="text-sm font-medium text-neutral-400">Sessions</h2>
+                <button
+                onClick={handleNewSession}
+                disabled={creatingSession}
+                className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium text-neutral-900 disabled:opacity-50"
+                >
+                {creatingSession ? "Creating..." : "+ New Session"}
+                </button>
+            </div>
+
+            {sessions.length === 0 && (
+                <p className="rounded-lg border border-neutral-800 bg-neutral-900 p-4 text-sm text-neutral-500">
+                No active sessions.
+                </p>
+            )}
+
+            {sessions.map((session) => {
+                const codeServer = session.services.find((s) => s.service_type === "CODE_SERVER");
+                return (
+                <div
+                    key={session.session_id}
+                    className="flex items-center justify-between rounded-lg border border-neutral-800 bg-neutral-900 p-4"
+                >
+                    <div>
+                    <p className="text-sm font-medium">
+                        Session {session.session_id.slice(0, 8)}
+                    </p>
+                    <p className="text-xs text-neutral-500">
+                        Started {new Date(session.started_at).toLocaleString()}
+                        {codeServer && ` · code-server: ${codeServer.status.toLowerCase()}`}
+                    </p>
+                    </div>
+                    <div className="flex gap-2">
+                    <button
+                        onClick={() => router.push(`/dashboard/session/${session.session_id}`)}
+                        className="rounded border border-neutral-700 px-3 py-1.5 text-sm hover:bg-neutral-800"
+                    >
+                        Rejoin
+                    </button>
+                    <button
+                        onClick={() => handleTerminateFromList(session.session_id)}
+                        className="rounded border border-red-900 px-3 py-1.5 text-sm text-red-400 hover:bg-red-950/50"
+                    >
+                        Terminate
+                    </button>
+                    </div>
+                </div>
+                );
+            })}
+            </div>
         </div>
-        </div>
+    </div>
     );
 }
 
