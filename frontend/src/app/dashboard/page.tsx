@@ -24,6 +24,8 @@ interface UserInfo {
 
 const POLL_INTERVAL_MS = 5000;
 
+
+
 export default function DashboardPage() {
     const router = useRouter();
     const [user, setUser] = useState<UserInfo | null>(null);
@@ -78,6 +80,10 @@ export default function DashboardPage() {
     async function handleLogout() {
         await api_fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
         router.push("/login");
+    }
+    async function handleNewSession() {
+        const session = await api_fetch("/api/sessions", { method: "POST" });
+        router.push(`/dashboard/session/${session.session_id}`);
     }
 
     if (loading) {
@@ -136,13 +142,17 @@ export default function DashboardPage() {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <button
+                className={`rounded px-4 py-2.5 text-sm font-medium transition disabled:opacity-40 bg-neutral-100 text-neutral-900`}
+                onClick={() => handleNewSession()}
+            >New Session</button>
             <ActionButton
                 label="Power On"
                 busyLabel="Booting..."
                 busy={actionInProgress === "power-on"}
                 disabled={!!actionInProgress}
                 onClick={() => handleAction("power-on")}
-                variant="primary"
+                variant="neutral"
             />
             <ActionButton
                 label="Graceful Shutdown"

@@ -1,6 +1,8 @@
 import { NodeSSH } from "node-ssh";
 import fs from "fs";
 import dotenv from "dotenv";
+import net from "node:net";
+
 
 dotenv.config();
 
@@ -46,34 +48,53 @@ export const graceful_shutdown= async ()=>{
 
 }
 
+// export const is_pc_online = async (timeoutMs = 2000): Promise<boolean> => {
+//     let is_timeout:boolean= false;
+//     try {
+//         const ssh_promise= connect_pc().then((ssh)=>{
+//             if(is_timeout){
+//                 ssh.dispose();
+//                 return null;
+//             }
+//             return ssh;
+//         });
+//         const timer_promise= new Promise<never>((_, reject)=>{
+//             setTimeout(()=>{
+//                 is_timeout= true;
+//                 reject(new Error("SSH connection timeout"));
+//             }, timeoutMs);
+//         });
+
+//         const result = await Promise.race([ssh_promise, timer_promise]);
+//         if(result){
+//             result.dispose();
+//             return true;
+//         }
+//         return false;
+//     } catch {
+//         return false; 
+//     }
+// }
 
 
-export const is_pc_online = async (timeoutMs = 2000): Promise<boolean> => {
-    let is_timeout:boolean= false;
-    try {
-        const ssh_promise= connect_pc().then((ssh)=>{
-            if(is_timeout){
-                ssh.dispose();
-                return null;
-            }
-            return ssh;
-        });
-        const timer_promise= new Promise<never>((_, reject)=>{
-            setTimeout(()=>{
-                is_timeout= true;
-                reject(new Error("SSH connection timeout"));
-            }, timeoutMs);
-        });
 
-        const result = await Promise.race([ssh_promise, timer_promise]);
-        if(result){
-            result.dispose();
-            return true;
-        }
-        return false;
-    } catch {
-        return false; 
-    }
+export const is_pc_online=  (timeoutMs = 2000): Promise<boolean>=> {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    socket.setTimeout(timeoutMs);
+
+    socket.once("connect", () => {
+      socket.destroy();
+      resolve(true);
+    });
+    socket.once("error", () => resolve(false));
+    socket.once("timeout", () => {
+      socket.destroy();
+      resolve(false);
+    });
+
+    socket.connect(22, TARGET_PC_IP);
+  });
 }
 
 

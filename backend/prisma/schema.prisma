@@ -12,16 +12,21 @@ datasource db {
   provider = "postgresql"
 }
 
+
+
+
 enum Role{
   USER
   ADMIN
   ROOT
 }
+
 enum Access {
   GRANTED
   SUSPENDED
   REJECTED
 }
+
 enum Power_action{
   MAINS_CONNECTED
   MAINS_CUT
@@ -30,12 +35,33 @@ enum Power_action{
   SHUTDOWN_NORMAL
   SHUTDOWN_FORCED
 }
+
 enum Operation{
   NO_OPERATION
   BOOT
   SHUTDOWN
   PLUG_CUT
 }
+
+enum ServiceType {
+  CODE_SERVER
+  SUNSHINE
+}
+
+enum ServiceStatus {
+  STARTING
+  RUNNING
+  STOPPED
+  FAILED
+}
+
+enum Session_status {
+  ACTIVE
+  TERMINATED
+}
+
+
+
 
 model User{
   user_id String @id @default(uuid())
@@ -47,6 +73,7 @@ model User{
   created_at DateTime @default(now())
   power_events Power_event[]
   auth_sessions Auth_session[]
+  sessions Session[]
 }
 
 model Plug{
@@ -57,7 +84,6 @@ model Plug{
   plug_identifier String?
   power_events Power_event[]
 }
-
 
 model Power_event{
   event_id String @id @default(uuid())
@@ -84,4 +110,27 @@ model Pc_lock{
   lock_id Int @unique @default(autoincrement())
   operation Operation
   power_cut_at DateTime?
+}
+
+model Session {
+  session_id String   @id @default(uuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  status     Session_status @default(ACTIVE)
+  started_at DateTime @default(now())
+  ended_at   DateTime?
+  services   Session_service[]
+}
+
+model Session_service {
+  service_id   String   @id @default(uuid())
+  session_id   String
+  session      Session  @relation(fields: [session_id], references: [session_id])
+  service_type ServiceType
+  port         Int
+  password     String   // per-session random, plaintext by necessity — code-server needs it verbatim for auto-login
+  pid          Int?
+  status       ServiceStatus @default(STARTING)
+  started_at   DateTime @default(now())
+  stopped_at   DateTime?
 }

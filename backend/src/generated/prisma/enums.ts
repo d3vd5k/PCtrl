@@ -47,3 +47,29 @@ export const Operation = {
 } as const
 
 export type Operation = (typeof Operation)[keyof typeof Operation]
+
+
+export const ServiceType = {
+  CODE_SERVER: 'CODE_SERVER',
+  SUNSHINE: 'SUNSHINE'
+} as const
+
+export type ServiceType = (typeof ServiceType)[keyof typeof ServiceType]
+
+
+export const ServiceStatus = {
+  STARTING: 'STARTING',
+  RUNNING: 'RUNNING',
+  STOPPED: 'STOPPED',
+  FAILED: 'FAILED'
+} as const
+
+export type ServiceStatus = (typeof ServiceStatus)[keyof typeof ServiceStatus]
+
+
+export const Session_status = {
+  ACTIVE: 'ACTIVE',
+  TERMINATED: 'TERMINATED'
+} as const
+
+export type Session_status = (typeof Session_status)[keyof typeof Session_status]

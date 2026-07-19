@@ -43,10 +43,6 @@ async function main(){
       plug_identifier: "Tapo P110", // must match Tapo app alias
     },
     });
-
-
-    console.log({ root: root.email, admin: admin.email, plug: plug.name });
-
     const operation = await prisma.pc_lock.upsert({
     where: { lock_id: 0 }, // replace with real MAC
     update: {operation: Operation.NO_OPERATION,},
@@ -55,6 +51,26 @@ async function main(){
       operation: Operation.NO_OPERATION,
     },
     });
+
+  const HARDCODED_SESSION_ID = '123e4567-e89b-12d3-a456-426614174000';
+
+  const session = await prisma.session.upsert({
+    where: { 
+      session_id: HARDCODED_SESSION_ID 
+    },
+    update: {
+      status: 'ACTIVE',
+      ended_at: null,
+    },
+    create: {
+      session_id: HARDCODED_SESSION_ID, 
+      user_id: root.user_id,
+      status: 'ACTIVE',
+    },
+  });
+
+    console.log({ root: root.email, admin: admin.email, plug: plug.name, operation:operation, session:session.session_id});
+
 
 
 

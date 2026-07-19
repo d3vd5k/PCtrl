@@ -66,3 +66,13 @@ export type Auth_session = Prisma.Auth_sessionModel
  * 
  */
 export type Pc_lock = Prisma.Pc_lockModel
+/**
+ * Model Session
+ * 
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model Session_service
+ * 
+ */
+export type Session_service = Prisma.Session_serviceModel

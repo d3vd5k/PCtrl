@@ -17,7 +17,7 @@ export const get_status= async (_req:Request, res:Response)=>{
         if(!plug){
             throw new Error("Plug Not Found");
         }
-        const [pc_status, plug_status]= await Promise.all([is_pc_online(1500), get_plug_status(plug.plug_id)]);
+        const [pc_status, plug_status]= await Promise.all([is_pc_online(2000), get_plug_status(plug.plug_id)]);
         res.json({pc_status:pc_status?"online":"offline", plug:plug_status});
     
     }
@@ -91,7 +91,10 @@ export const boot_pc= async(_req: Request, res: Response)=> {
         console.error("[boot_pc] plug unreachable:", err);
         return res.status(503).json({ message: "Unable to reach plug. Check physical connection." });
     }
-    
+    const pc_online= await is_pc_online(1500);
+    if(pc_online){
+        return res.status(409).json({message: "PC already online"})
+    }
     await prisma.power_event.create({
     data: { event_type: "BOOT_STARTED", plug_id: plug.plug_id },
     });

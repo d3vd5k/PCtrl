@@ -55,7 +55,9 @@ export const ModelName = {
   Plug: 'Plug',
   Power_event: 'Power_event',
   Auth_session: 'Auth_session',
-  Pc_lock: 'Pc_lock'
+  Pc_lock: 'Pc_lock',
+  Session: 'Session',
+  Session_service: 'Session_service'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -129,6 +131,32 @@ export const Pc_lockScalarFieldEnum = {
 } as const
 
 export type Pc_lockScalarFieldEnum = (typeof Pc_lockScalarFieldEnum)[keyof typeof Pc_lockScalarFieldEnum]
+
+
+export const SessionScalarFieldEnum = {
+  session_id: 'session_id',
+  user_id: 'user_id',
+  status: 'status',
+  started_at: 'started_at',
+  ended_at: 'ended_at'
+} as const
+
+export type SessionScalarFieldEnum = (typeof SessionScalarFieldEnum)[keyof typeof SessionScalarFieldEnum]
+
+
+export const Session_serviceScalarFieldEnum = {
+  service_id: 'service_id',
+  session_id: 'session_id',
+  service_type: 'service_type',
+  port: 'port',
+  password: 'password',
+  pid: 'pid',
+  status: 'status',
+  started_at: 'started_at',
+  stopped_at: 'stopped_at'
+} as const
+
+export type Session_serviceScalarFieldEnum = (typeof Session_serviceScalarFieldEnum)[keyof typeof Session_serviceScalarFieldEnum]
 
 
 export const SortOrder = {
