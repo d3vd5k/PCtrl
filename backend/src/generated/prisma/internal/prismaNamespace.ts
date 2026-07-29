@@ -387,10 +387,12 @@ export const ModelName = {
   User: 'User',
   Plug: 'Plug',
   Power_event: 'Power_event',
-  Auth_session: 'Auth_session',
   Pc_lock: 'Pc_lock',
   Session: 'Session',
-  Session_service: 'Session_service'
+  Session_service: 'Session_service',
+  Password_reset_token: 'Password_reset_token',
+  Grid_status: 'Grid_status',
+  Sunshine_status: 'Sunshine_status'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "plug" | "power_event" | "auth_session" | "pc_lock" | "session" | "session_service"
+    modelProps: "user" | "plug" | "power_event" | "pc_lock" | "session" | "session_service" | "password_reset_token" | "grid_status" | "sunshine_status"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -632,80 +634,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Auth_session: {
-      payload: Prisma.$Auth_sessionPayload<ExtArgs>
-      fields: Prisma.Auth_sessionFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.Auth_sessionFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.Auth_sessionFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        findFirst: {
-          args: Prisma.Auth_sessionFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.Auth_sessionFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        findMany: {
-          args: Prisma.Auth_sessionFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>[]
-        }
-        create: {
-          args: Prisma.Auth_sessionCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        createMany: {
-          args: Prisma.Auth_sessionCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.Auth_sessionCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>[]
-        }
-        delete: {
-          args: Prisma.Auth_sessionDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        update: {
-          args: Prisma.Auth_sessionUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        deleteMany: {
-          args: Prisma.Auth_sessionDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.Auth_sessionUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.Auth_sessionUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>[]
-        }
-        upsert: {
-          args: Prisma.Auth_sessionUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$Auth_sessionPayload>
-        }
-        aggregate: {
-          args: Prisma.Auth_sessionAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAuth_session>
-        }
-        groupBy: {
-          args: Prisma.Auth_sessionGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Auth_sessionGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.Auth_sessionCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.Auth_sessionCountAggregateOutputType> | number
-        }
-      }
-    }
     Pc_lock: {
       payload: Prisma.$Pc_lockPayload<ExtArgs>
       fields: Prisma.Pc_lockFieldRefs
@@ -928,6 +856,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Password_reset_token: {
+      payload: Prisma.$Password_reset_tokenPayload<ExtArgs>
+      fields: Prisma.Password_reset_tokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.Password_reset_tokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.Password_reset_tokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        findFirst: {
+          args: Prisma.Password_reset_tokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.Password_reset_tokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        findMany: {
+          args: Prisma.Password_reset_tokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>[]
+        }
+        create: {
+          args: Prisma.Password_reset_tokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        createMany: {
+          args: Prisma.Password_reset_tokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.Password_reset_tokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>[]
+        }
+        delete: {
+          args: Prisma.Password_reset_tokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        update: {
+          args: Prisma.Password_reset_tokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.Password_reset_tokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.Password_reset_tokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.Password_reset_tokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.Password_reset_tokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Password_reset_tokenPayload>
+        }
+        aggregate: {
+          args: Prisma.Password_reset_tokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePassword_reset_token>
+        }
+        groupBy: {
+          args: Prisma.Password_reset_tokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Password_reset_tokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.Password_reset_tokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Password_reset_tokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    Grid_status: {
+      payload: Prisma.$Grid_statusPayload<ExtArgs>
+      fields: Prisma.Grid_statusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.Grid_statusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.Grid_statusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        findFirst: {
+          args: Prisma.Grid_statusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.Grid_statusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        findMany: {
+          args: Prisma.Grid_statusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>[]
+        }
+        create: {
+          args: Prisma.Grid_statusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        createMany: {
+          args: Prisma.Grid_statusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.Grid_statusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>[]
+        }
+        delete: {
+          args: Prisma.Grid_statusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        update: {
+          args: Prisma.Grid_statusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        deleteMany: {
+          args: Prisma.Grid_statusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.Grid_statusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.Grid_statusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>[]
+        }
+        upsert: {
+          args: Prisma.Grid_statusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Grid_statusPayload>
+        }
+        aggregate: {
+          args: Prisma.Grid_statusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGrid_status>
+        }
+        groupBy: {
+          args: Prisma.Grid_statusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Grid_statusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.Grid_statusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Grid_statusCountAggregateOutputType> | number
+        }
+      }
+    }
+    Sunshine_status: {
+      payload: Prisma.$Sunshine_statusPayload<ExtArgs>
+      fields: Prisma.Sunshine_statusFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.Sunshine_statusFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.Sunshine_statusFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        findFirst: {
+          args: Prisma.Sunshine_statusFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.Sunshine_statusFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        findMany: {
+          args: Prisma.Sunshine_statusFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>[]
+        }
+        create: {
+          args: Prisma.Sunshine_statusCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        createMany: {
+          args: Prisma.Sunshine_statusCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.Sunshine_statusCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>[]
+        }
+        delete: {
+          args: Prisma.Sunshine_statusDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        update: {
+          args: Prisma.Sunshine_statusUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        deleteMany: {
+          args: Prisma.Sunshine_statusDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.Sunshine_statusUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.Sunshine_statusUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>[]
+        }
+        upsert: {
+          args: Prisma.Sunshine_statusUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$Sunshine_statusPayload>
+        }
+        aggregate: {
+          args: Prisma.Sunshine_statusAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSunshine_status>
+        }
+        groupBy: {
+          args: Prisma.Sunshine_statusGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Sunshine_statusGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.Sunshine_statusCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Sunshine_statusCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1003,18 +1153,6 @@ export const Power_eventScalarFieldEnum = {
 export type Power_eventScalarFieldEnum = (typeof Power_eventScalarFieldEnum)[keyof typeof Power_eventScalarFieldEnum]
 
 
-export const Auth_sessionScalarFieldEnum = {
-  auth_session_id: 'auth_session_id',
-  token_hash: 'token_hash',
-  user_id: 'user_id',
-  created_at: 'created_at',
-  expires_at: 'expires_at',
-  valid: 'valid'
-} as const
-
-export type Auth_sessionScalarFieldEnum = (typeof Auth_sessionScalarFieldEnum)[keyof typeof Auth_sessionScalarFieldEnum]
-
-
 export const Pc_lockScalarFieldEnum = {
   lock_id: 'lock_id',
   operation: 'operation',
@@ -1048,6 +1186,37 @@ export const Session_serviceScalarFieldEnum = {
 } as const
 
 export type Session_serviceScalarFieldEnum = (typeof Session_serviceScalarFieldEnum)[keyof typeof Session_serviceScalarFieldEnum]
+
+
+export const Password_reset_tokenScalarFieldEnum = {
+  token_id: 'token_id',
+  user_id: 'user_id',
+  token_hash: 'token_hash',
+  expires_at: 'expires_at',
+  used: 'used',
+  created_at: 'created_at'
+} as const
+
+export type Password_reset_tokenScalarFieldEnum = (typeof Password_reset_tokenScalarFieldEnum)[keyof typeof Password_reset_tokenScalarFieldEnum]
+
+
+export const Grid_statusScalarFieldEnum = {
+  status_id: 'status_id',
+  status: 'status',
+  updated_at: 'updated_at'
+} as const
+
+export type Grid_statusScalarFieldEnum = (typeof Grid_statusScalarFieldEnum)[keyof typeof Grid_statusScalarFieldEnum]
+
+
+export const Sunshine_statusScalarFieldEnum = {
+  status_id: 'status_id',
+  running: 'running',
+  pid: 'pid',
+  started_at: 'started_at'
+} as const
+
+export type Sunshine_statusScalarFieldEnum = (typeof Sunshine_statusScalarFieldEnum)[keyof typeof Sunshine_statusScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1151,13 +1320,6 @@ export type ListEnumPower_actionFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
  * Reference to a field of type 'Int'
  */
 export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -1224,6 +1386,27 @@ export type EnumServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
  * Reference to a field of type 'ServiceStatus[]'
  */
 export type ListEnumServiceStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ServiceStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'ESP_STATUS'
+ */
+export type EnumESP_STATUSFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ESP_STATUS'>
+    
+
+
+/**
+ * Reference to a field of type 'ESP_STATUS[]'
+ */
+export type ListEnumESP_STATUSFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ESP_STATUS[]'>
     
 
 
@@ -1353,10 +1536,12 @@ export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   plug?: Prisma.PlugOmit
   power_event?: Prisma.Power_eventOmit
-  auth_session?: Prisma.Auth_sessionOmit
   pc_lock?: Prisma.Pc_lockOmit
   session?: Prisma.SessionOmit
   session_service?: Prisma.Session_serviceOmit
+  password_reset_token?: Prisma.Password_reset_tokenOmit
+  grid_status?: Prisma.Grid_statusOmit
+  sunshine_status?: Prisma.Sunshine_statusOmit
 }
 
 /* Types for Logging */

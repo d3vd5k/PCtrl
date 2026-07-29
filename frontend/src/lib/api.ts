@@ -1,7 +1,4 @@
-// const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
-
-export const api_fetch= async (path: string, options: RequestInit = {})=> {
-
+export const api_fetch = async (path: string, options: RequestInit = {}) => {
   const res = await fetch(path, {
     ...options,
     headers: {
@@ -12,8 +9,12 @@ export const api_fetch= async (path: string, options: RequestInit = {})=> {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(body.error || body.message || `Request failed: ${res.status}`);
+    const rawError = body.error || body.message || `Request failed: ${res.status}`;
+    const errorMessage = typeof rawError === "object" && rawError !== null
+      ? rawError.message || rawError.error || rawError.details || JSON.stringify(rawError)
+      : String(rawError);
+    throw new Error(errorMessage);
   }
 
   return res.json();
-}
+};

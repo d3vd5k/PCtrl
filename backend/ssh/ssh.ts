@@ -28,7 +28,7 @@ export const graceful_shutdown= async ()=>{
         ssh = await connect_pc();
     } 
     catch (err) {
-        console.log("PC is already offline or unreachable. Skipping shutdown.");
+        console.warn("[ssh] PC is already offline or unreachable. Skipping shutdown.");
         throw err;
     }
 
@@ -36,7 +36,7 @@ export const graceful_shutdown= async ()=>{
         await ssh.execCommand("sudo -n shutdown -h now > /dev/null 2>&1 &");
     }
     catch(err){
-        console.warn("Connection dropped during shutdown (expected behavior).");
+        console.log("[ssh] SSH connection dropped during shutdown (expected behavior).");
     }
     finally{
         if(ssh){
@@ -75,27 +75,27 @@ export const graceful_shutdown= async ()=>{
 //         return false; 
 //     }
 // }
+export const is_pc_online = (timeoutMs: number = 2000): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const socket = new net.Socket();
+      socket.setTimeout(timeoutMs);
 
+      // Helper to ensure the socket is always destroyed
+      const cleanUpAndResolve = (status: boolean) => {
+        socket.destroy();
+        resolve(status);
+      };
 
+      socket.once("connect", () => cleanUpAndResolve(true));
+      
+      // It's important to destroy the socket on error as well to prevent memory leaks
+      socket.once("error", () => cleanUpAndResolve(false));
+      
+      socket.once("timeout", () => cleanUpAndResolve(false));
 
-export const is_pc_online=  (timeoutMs = 2000): Promise<boolean>=> {
-  return new Promise((resolve) => {
-    const socket = new net.Socket();
-    socket.setTimeout(timeoutMs);
-
-    socket.once("connect", () => {
-      socket.destroy();
-      resolve(true);
-    });
-    socket.once("error", () => resolve(false));
-    socket.once("timeout", () => {
-      socket.destroy();
-      resolve(false);
-    });
-
-    socket.connect(22, TARGET_PC_IP);
+      socket.connect(22, TARGET_PC_IP);
   });
-}
+};
 
 
 export const wait_for_shutdown= async(maxWaitMs = 120_000, pollIntervalMs = 3000): Promise<boolean>=> {

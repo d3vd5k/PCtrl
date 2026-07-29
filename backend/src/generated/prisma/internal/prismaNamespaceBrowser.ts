@@ -54,10 +54,12 @@ export const ModelName = {
   User: 'User',
   Plug: 'Plug',
   Power_event: 'Power_event',
-  Auth_session: 'Auth_session',
   Pc_lock: 'Pc_lock',
   Session: 'Session',
-  Session_service: 'Session_service'
+  Session_service: 'Session_service',
+  Password_reset_token: 'Password_reset_token',
+  Grid_status: 'Grid_status',
+  Sunshine_status: 'Sunshine_status'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -112,18 +114,6 @@ export const Power_eventScalarFieldEnum = {
 export type Power_eventScalarFieldEnum = (typeof Power_eventScalarFieldEnum)[keyof typeof Power_eventScalarFieldEnum]
 
 
-export const Auth_sessionScalarFieldEnum = {
-  auth_session_id: 'auth_session_id',
-  token_hash: 'token_hash',
-  user_id: 'user_id',
-  created_at: 'created_at',
-  expires_at: 'expires_at',
-  valid: 'valid'
-} as const
-
-export type Auth_sessionScalarFieldEnum = (typeof Auth_sessionScalarFieldEnum)[keyof typeof Auth_sessionScalarFieldEnum]
-
-
 export const Pc_lockScalarFieldEnum = {
   lock_id: 'lock_id',
   operation: 'operation',
@@ -157,6 +147,37 @@ export const Session_serviceScalarFieldEnum = {
 } as const
 
 export type Session_serviceScalarFieldEnum = (typeof Session_serviceScalarFieldEnum)[keyof typeof Session_serviceScalarFieldEnum]
+
+
+export const Password_reset_tokenScalarFieldEnum = {
+  token_id: 'token_id',
+  user_id: 'user_id',
+  token_hash: 'token_hash',
+  expires_at: 'expires_at',
+  used: 'used',
+  created_at: 'created_at'
+} as const
+
+export type Password_reset_tokenScalarFieldEnum = (typeof Password_reset_tokenScalarFieldEnum)[keyof typeof Password_reset_tokenScalarFieldEnum]
+
+
+export const Grid_statusScalarFieldEnum = {
+  status_id: 'status_id',
+  status: 'status',
+  updated_at: 'updated_at'
+} as const
+
+export type Grid_statusScalarFieldEnum = (typeof Grid_statusScalarFieldEnum)[keyof typeof Grid_statusScalarFieldEnum]
+
+
+export const Sunshine_statusScalarFieldEnum = {
+  status_id: 'status_id',
+  running: 'running',
+  pid: 'pid',
+  started_at: 'started_at'
+} as const
+
+export type Sunshine_statusScalarFieldEnum = (typeof Sunshine_statusScalarFieldEnum)[keyof typeof Sunshine_statusScalarFieldEnum]
 
 
 export const SortOrder = {

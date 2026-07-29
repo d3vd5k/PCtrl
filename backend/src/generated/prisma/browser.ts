@@ -33,11 +33,6 @@ export type Plug = Prisma.PlugModel
  */
 export type Power_event = Prisma.Power_eventModel
 /**
- * Model Auth_session
- * 
- */
-export type Auth_session = Prisma.Auth_sessionModel
-/**
  * Model Pc_lock
  * 
  */
@@ -52,3 +47,18 @@ export type Session = Prisma.SessionModel
  * 
  */
 export type Session_service = Prisma.Session_serviceModel
+/**
+ * Model Password_reset_token
+ * 
+ */
+export type Password_reset_token = Prisma.Password_reset_tokenModel
+/**
+ * Model Grid_status
+ * 
+ */
+export type Grid_status = Prisma.Grid_statusModel
+/**
+ * Model Sunshine_status
+ * 
+ */
+export type Sunshine_status = Prisma.Sunshine_statusModel

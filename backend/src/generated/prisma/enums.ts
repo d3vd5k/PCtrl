@@ -19,6 +19,7 @@ export type Role = (typeof Role)[keyof typeof Role]
 
 
 export const Access = {
+  PENDING: 'PENDING',
   GRANTED: 'GRANTED',
   SUSPENDED: 'SUSPENDED',
   REJECTED: 'REJECTED'
@@ -73,3 +74,12 @@ export const Session_status = {
 } as const
 
 export type Session_status = (typeof Session_status)[keyof typeof Session_status]
+
+
+export const ESP_STATUS = {
+  NORMAL: 'NORMAL',
+  BROWNOUT: 'BROWNOUT',
+  POWERCUT: 'POWERCUT'
+} as const
+
+export type ESP_STATUS = (typeof ESP_STATUS)[keyof typeof ESP_STATUS]

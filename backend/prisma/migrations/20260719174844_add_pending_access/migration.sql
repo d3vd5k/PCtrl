@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "Access" ADD VALUE 'PENDING';
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "access" SET DEFAULT 'PENDING';

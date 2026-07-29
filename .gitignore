@@ -1,3 +1,10 @@
+.graphifyignore
+.venv/*
+.pi/*
+*graphify-out/*
+notes
+.codex/*
+.agents/*
 node_modules
 */backend/src/generated/prisma
 */node_modules

@@ -9,7 +9,7 @@ await wait_for_shutdown();
 
 const plug_data = await prisma.plug.findFirst({where: {name: "Gaming PC Main Socket",}});
 if(!plug_data){
-    console.log("PLUG not found in DB");
+    console.error("[test-shutdown] Plug not found in database.");
     throw new Error("Plug Not Found in DB");
 }
 const plug= await get_plug_by_id(plug_data.plug_id);

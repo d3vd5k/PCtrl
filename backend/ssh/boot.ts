@@ -10,13 +10,13 @@ export const initiate_boot= async (plug_id:string)=>{
 
         const boot_status= await wait_for_boot();
         if(boot_status){
-            console.log("booted Successfully");
+            console.log("[ssh] PC booted successfully.");
             
         }
         throw new Error("Boot Unsuccessful");
     }
     catch(err){
-        console.log("Boot Unsuccessful");
+        console.error("[ssh] Boot failed:", err);
         throw err;
     }
 
@@ -32,10 +32,10 @@ export const full_shutdown= async (plug_id:string)=>{
             throw new Error("Can't Connect to PLUG");
         }
         await plug.turnOff();
-        console.log("Shutdown unsuccessful!!!");
+        console.log("[ssh] Shutdown completed successfully.");
     }
     catch(err){
-        console.log("Shutdown unsuccessful!!!");
+        console.error("[ssh] Shutdown failed:", err);
         throw err;
     }
 

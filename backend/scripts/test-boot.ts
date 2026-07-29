@@ -17,13 +17,13 @@ await plug.turnOn();
 
 const boot_status= await wait_for_boot();
 if(boot_status){
-    console.log("booted Successfully");
+    console.log("[test-boot] Booted successfully.");
     const PC= await connect_pc();
     if(!PC){
         throw new Error("Unable to connect to PC via SSH");
     }
     const fetch= await PC.execCommand("fastfetch");
-    console.log(fetch);
+    console.log("[test-boot] Command output:", fetch);
     PC.dispose();
     
 }

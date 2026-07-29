@@ -52,6 +52,23 @@ async function main(){
     },
     });
 
+
+     const user_passwd_hash= await bcrypt.hash(process.env.USER_SEED_PASSWORD??"password", 10);
+    if(!user_passwd_hash){
+        throw new Error("Error in generating password hash");
+    }
+    const user = await prisma.user.upsert({
+    where: { email: "user@pctrl.local" },
+    update: {access: Access.GRANTED,},
+    create: {
+      name: "user",
+      email: "user@pctrl.local",
+      role: Role.USER,
+      access: Access.GRANTED,
+      password_hash: user_passwd_hash,
+    },
+  });
+
   const HARDCODED_SESSION_ID = '123e4567-e89b-12d3-a456-426614174000';
 
   const session = await prisma.session.upsert({
@@ -69,7 +86,14 @@ async function main(){
     },
   });
 
-    console.log({ root: root.email, admin: admin.email, plug: plug.name, operation:operation, session:session.session_id});
+  const sunshine= await prisma.sunshine_status.upsert({
+      where:{status_id:0},
+      update:{status_id:0, running:false},
+      create:{
+        status_id:0, running:false}
+  });
+
+    console.log("[seed] Seeding complete:", { root: root.email, admin: admin.email, plug: plug.name, operation:operation, session:session.session_id, sunshine: sunshine});
 
 
 
@@ -77,7 +101,7 @@ async function main(){
   }
 
 main().catch((e)=>{
-    console.error(e);
+    console.error("[seed] Seeding failed:", e);
     process.exit(1);
 })
 .finally(async ()=>{

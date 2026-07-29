@@ -1,4 +1,11 @@
 import { get_plug_by_id } from "../../plug/plug.js";
+import { prisma } from "./prisma.js"
+
+export const get_plug_id= async()=>{
+    const plug= prisma.plug.findFirst();
+    return plug;
+}
+
 
 export const plug_turn_on= async(id:string)=>{
     const device = await get_plug_by_id(id);
@@ -21,7 +28,7 @@ export const get_plug_status = async (id: string) => {
         power: energy.current_power ?? null,
         };
     } catch (err) {
-        console.error(`[plug] status check failed for ${id}:`, err);
+        console.error(`[plug] Status check failed for ${id}:`, err);
         return { reachable: false as const, device_on: null, power: null };
     }
 };

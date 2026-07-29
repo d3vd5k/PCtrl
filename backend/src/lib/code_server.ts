@@ -83,10 +83,10 @@ async function wait_for_process_start(ssh: NodeSSH, port: number, max_wait_time 
     while (Date.now() - start < max_wait_time) {
         const pid_result = await ssh.execCommand(`pgrep -f "code-server.*--bind-addr 0.0.0.0:${port}"`);
         const pid_val= pid_result.stdout.trim().split("\n")[0]
-        // if(!pid_val){ 
-        //     await new Promise((r) => setTimeout(r, poll_interval));
-        //     continue;
-        // }
+        if(!pid_val){ 
+            await new Promise((r) => setTimeout(r, poll_interval));
+            continue;
+        }
         const pid = parseInt(pid_val, 10);
 
         if (pid && !isNaN(pid)) {
@@ -105,7 +105,7 @@ async function wait_for_process_end(ssh: NodeSSH, port: number, max_wait_time = 
     while (Date.now() - start < max_wait_time) {
         const pid_result = await ssh.execCommand(`pgrep -f "code-server.*--bind-addr 0.0.0.0:${port}"`);
         const pid_val= pid_result.stdout.trim().split("\n")[0]
-        // if(!pid_val){return;}
+        if(!pid_val){return;}
         const pid = parseInt(pid_val, 10);
 
         if (!pid || isNaN(pid)) {
@@ -134,7 +134,7 @@ export const launch_code_server= async (sessionId: string)=> {
         `--bind-addr 0.0.0.0:${port} --auth password --trusted-origins ${FRONTEND_ORIGIN} ` +
         `> /tmp/code-server-${port}.log 2>&1 &`;
 
-        console.log("[launch_code_server] executing:", launchCmd);
+        console.log("[code-server] Executing launch command:", launchCmd);
         await ssh.execCommand(launchCmd);
 
         const pid = await wait_for_process_start(ssh, port);

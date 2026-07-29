@@ -22,6 +22,7 @@ enum Role{
 }
 
 enum Access {
+  PENDING
   GRANTED
   SUSPENDED
   REJECTED
@@ -60,6 +61,11 @@ enum Session_status {
   TERMINATED
 }
 
+enum ESP_STATUS {
+  NORMAL
+  BROWNOUT
+  POWERCUT
+}
 
 
 
@@ -68,12 +74,12 @@ model User{
   name String
   email String @unique
   role Role @default(USER)
-  access Access @default(SUSPENDED)
+  access Access @default(PENDING)
   password_hash String?
   created_at DateTime @default(now())
   power_events Power_event[]
-  auth_sessions Auth_session[]
   sessions Session[]
+  password_reset_tokens Password_reset_token[]
 }
 
 model Plug{
@@ -94,16 +100,6 @@ model Power_event{
   plug Plug @relation(fields: [plug_id], references: [plug_id])
   timestamp DateTime @default(now())
   description String?
-}
-
-model Auth_session{
-  auth_session_id String @id @default(uuid())
-  token_hash String @unique //ideally change to token hash
-  user_id String?
-  user User? @relation(fields:[user_id], references:[user_id])
-  created_at DateTime @default(now())
-  expires_at DateTime
-  valid Boolean @default(true)
 }
 
 model Pc_lock{
@@ -133,4 +129,27 @@ model Session_service {
   status       ServiceStatus @default(STARTING)
   started_at   DateTime @default(now())
   stopped_at   DateTime?
+}
+
+model Password_reset_token {
+  token_id   String   @id @default(uuid())
+  user_id    String
+  user       User     @relation(fields: [user_id], references: [user_id])
+  token_hash String   @unique
+  expires_at DateTime
+  used       Boolean  @default(false)
+  created_at DateTime @default(now())
+}
+
+model Grid_status {
+  status_id Int @unique @default(autoincrement())
+  status    ESP_STATUS @default(NORMAL)
+  updated_at DateTime @updatedAt
+}
+
+model Sunshine_status {
+  status_id  Int      @unique @default(autoincrement())
+  running    Boolean  @default(false)
+  pid        Int?
+  started_at DateTime?
 }

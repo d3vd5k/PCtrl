@@ -31,7 +31,7 @@ async function main() {
     }
 
     else{
-        console.log("worng input")
+        console.error("[test-plug] Wrong input. Use: on | off | status | energy");
     }
 
     
@@ -47,7 +47,7 @@ async function main() {
 
 
 main().catch((err)=>{
-    console.log("Script execution failed!!!");
+    console.error("[test-plug] Script execution failed:", err);
     process.exit(1);
 });
 //sample devices object
